@@ -13,3 +13,4 @@ build/
 compile_commands.json
 .projectile
 .clangd
+tags
