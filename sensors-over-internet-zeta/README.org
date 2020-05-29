@@ -1,0 +1,18 @@
+** Execution
+	Before compiling the samples you have to make sure the env for Zephyr is ok. Execute the following command:
+
+ #+BEGIN_SRC bash
+ source ${ZEPHYR_BASE}/zephyr-env.sh # just once. At 
+ #+END_SRC
+
+	For executing this sample, we have to execute this to the Native Posix board:
+
+ #+BEGIN_SRC bash
+ rm -rf build && west build -b native_posix
+ #+END_SRC
+
+	For calculating the memory footprint for this sample, we have to execute this to the nrf52840dongle board:
+   
+ #+BEGIN_SRC bash
+ CONF_FILE=prj_nrf52840dongle_nrf52840.conf; rm -rf build && west build -b nrf52840dongle_nrf52840
+ #+END_SRC
