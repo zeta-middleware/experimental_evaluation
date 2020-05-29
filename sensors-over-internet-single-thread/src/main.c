@@ -161,8 +161,8 @@ static void handle_net_requests(void)
         net_request = 0xA5;
     }
 
-    LOG_DBG("Getting a virtual packet request from net with id: %02X\n", net_request);
-    LOG_DBG("Sending a net packet request to NET_REQUEST channel...\n");
+    LOG_DBG("Getting a virtual packet request from net with id: %02X", net_request);
+    LOG_DBG("Sending a net packet request to NET_REQUEST channel...");
     k_sem_give(&get_net_request_packet_sem);
 }
 
@@ -172,43 +172,43 @@ void nvs_save_data(void)
         nvs_write(&fs, NVS_ID_SENSOR_A,
                   &ring_data_a[(id_a == 0) ? MAX_RING_SIZE : id_a - 1], sizeof(u8_t));
     if (bytes_written > 0) {
-        LOG_DBG("Sensor A was saved on the flash!\n");
+        LOG_DBG("Sensor A was saved on the flash!");
     }
     bytes_written = nvs_write(&fs, NVS_ID_NET_RESPONSE, net_response, sizeof(u8_t) * 5);
     if (bytes_written > 0) {
-        LOG_DBG("Net response was saved on the flash!\n");
+        LOG_DBG("Net response was saved on the flash!");
     }
 }
 
 void recovery_data_from_flash(void)
 {
-    LOG_DBG("Recovering data from flash [ ]\n");
+    LOG_DBG("Recovering data from flash [ ]");
     int rc                     = 0;
     u8_t data_a_flash          = 0;
     u8_t net_response_flash[5] = {0};
 
     rc = nvs_read(&fs, NVS_ID_SENSOR_A, &data_a_flash, sizeof(u8_t));
     if (rc > 0) {
-        LOG_DBG("Id: %d, value: %d\n", NVS_ID_SENSOR_A, data_a_flash);
+        LOG_DBG("Id: %d, value: %d", NVS_ID_SENSOR_A, data_a_flash);
     }
 
     rc = nvs_read(&fs, NVS_ID_NET_RESPONSE, net_response_flash, 5);
     if (rc > 0) {
-        LOG_DBG("Id: %d, value: ", NVS_ID_NET_RESPONSE);
-        for (size_t i = 0; i < 5; i++) {
-            LOG_DBG(" %02X", net_response_flash[i]);
-        }
-        LOG_DBG("|");
-        for (size_t i = 0; i < 5; i++) {
-            if (32 <= net_response_flash[i] && net_response_flash[i] <= 126) {
-                LOG_DBG("%c", net_response_flash[i]);
-            } else {
-                LOG_DBG(".");
-            }
-        }
+        LOG_DBG("Id: %d", NVS_ID_NET_RESPONSE);
+        LOG_HEXDUMP_DBG(net_response_flash, 5, "Value:");
+        /* for (size_t i = 0; i < 5; i++) { */
+        /*     LOG_DBG(" %02X", net_response_flash[i]); */
+        /* } */
+        /* LOG_DBG("|"); */
+        /* for (size_t i = 0; i < 5; i++) { */
+        /*     if (32 <= net_response_flash[i] && net_response_flash[i] <= 126) { */
+        /*         LOG_DBG("%c", net_response_flash[i]); */
+        /*     } else { */
+        /*         LOG_DBG("."); */
+        /*     } */
+        /* } */
     }
-    LOG_DBG("\n");
-    LOG_DBG("Recovering data from flash [X]\n");
+    LOG_DBG("Recovering data from flash [X]");
 }
 
 void main(void)
@@ -225,9 +225,9 @@ void main(void)
 
     int nvs_err = nvs_init(&fs, DT_CHOSEN_ZEPHYR_FLASH_CONTROLLER_LABEL);
     if (nvs_err) {
-        LOG_DBG("Nvs init failed\n");
+        LOG_DBG("Nvs init failed");
     } else {
-        LOG_DBG("Nvs started...\n");
+        LOG_DBG("Nvs started...");
         recovery_data_from_flash();
     }
 
@@ -239,13 +239,13 @@ void main(void)
         if (!k_sem_take(&get_sensors_data_sem, K_NO_WAIT)) {
             ring_data_a[id_a] = new_data_a;
             id_a              = (id_a + 1) % MAX_RING_SIZE;
-            LOG_DBG("Data received from sensor A: %d\n", new_data_a);
+            LOG_DBG("Data received from sensor A: %d", new_data_a);
             ring_data_b[id_b] = new_data_b;
             id_b              = (id_b + 1) % MAX_RING_SIZE;
-            LOG_DBG("Data received from sensor B: %d\n", new_data_b);
+            LOG_DBG("Data received from sensor B: %d", new_data_b);
             ring_data_c[id_c] = new_data_c;
             id_c              = (id_c + 1) % MAX_RING_SIZE;
-            LOG_DBG("Data received from sensor C: %d\n", new_data_c);
+            LOG_DBG("Data received from sensor C: %d", new_data_c);
         }
         if (!k_sem_take(&get_net_request_packet_sem, K_NO_WAIT)) {
             memset(net_response, 0, 5);
@@ -268,40 +268,37 @@ void main(void)
                 u32_t c_mean = sensor_c_mean();
                 memcpy(net_response + 1, &c_mean, sizeof(u32_t));
             } else {
-                LOG_DBG("Net request sent is invalid!\n");
+                LOG_DBG("Net request sent is invalid!");
             }
-            LOG_DBG("Net request received with ID: %02X\n", net_request);
-            LOG_DBG("Sending a net response...\n");
+            LOG_DBG("Net request received with ID: %02X", net_request);
+            LOG_DBG("Sending a net response...");
             k_sem_give(&get_net_response_packet_sem);
         }
         if (!k_sem_take(&get_net_response_packet_sem, K_NO_WAIT)) {
-            LOG_DBG("Net response received...\n");
+            LOG_DBG("Net response received...");
             if (net_response[0] == 0xA0) {  // Requesting last A data
-                LOG_DBG("Last sensor A data saved: %d\n", net_response[1]);
+                LOG_DBG("Last sensor A data saved: %d", net_response[1]);
             } else if (net_response[0] == 0xA1) {  // Requesting last B data
-                LOG_DBG("Last sensor B data saved: %d\n", net_response[1]);
+                LOG_DBG("Last sensor B data saved: %d", net_response[1]);
             } else if (net_response[0] == 0xA2) {  // Requesting last C data
                 u32_t c_value = 0;
                 memcpy(&c_value, net_response + 1, sizeof(u32_t));
-                LOG_DBG("Last sensor C data saved: %d\n", c_value);
+                LOG_DBG("Last sensor C data saved: %d", c_value);
             } else if (net_response[0] == 0xA3) {  // Requesting A mean
                 u16_t a_mean = 0;
                 memcpy(&a_mean, net_response + 1, sizeof(u16_t));
-                LOG_DBG("Current A mean: %d\n", a_mean);
+                LOG_DBG("Current A mean: %d", a_mean);
             } else if (net_response[0] == 0xA4) {  // Requesting B mean
                 u16_t b_mean = 0;
                 memcpy(&b_mean, net_response + 1, sizeof(u16_t));
-                LOG_DBG("Current B mean: %d\n", b_mean);
+                LOG_DBG("Current B mean: %d", b_mean);
             } else if (net_response[0] == 0xA5) {  // Requesting C mean
                 u32_t c_mean = 0;
                 memcpy(&c_mean, net_response + 1, sizeof(u32_t));
-                LOG_DBG("Current C mean: %d\n", c_mean);
+                LOG_DBG("Current C mean: %d", c_mean);
             } else {
-                LOG_DBG("Net response sent is invalid!\n");
+                LOG_DBG("Net response sent is invalid!");
             }
-            u32_t per = cpu_stats_non_idle_and_sched_get_percent();
-            LOG_WRN("CPU usage: %u%%\n", per);
-            cpu_stats_reset_counters();
         }
         if (!k_sem_take(&generate_net_request_packet_sem, K_NO_WAIT)) {
             handle_net_requests();
