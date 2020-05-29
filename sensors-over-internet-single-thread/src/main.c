@@ -299,6 +299,9 @@ void main(void)
             } else {
                 LOG_DBG("Net response sent is invalid!");
             }
+            u32_t per = cpu_stats_non_idle_and_sched_get_percent();
+            LOG_WRN("CPU usage: %u%%", per);
+            cpu_stats_reset_counters();
         }
         if (!k_sem_take(&generate_net_request_packet_sem, K_NO_WAIT)) {
             handle_net_requests();

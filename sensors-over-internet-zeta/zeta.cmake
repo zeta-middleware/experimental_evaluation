@@ -10,7 +10,7 @@ execute_process(COMMAND zeta gen -b "${CMAKE_CURRENT_LIST_DIR}/build"
 if(ztcli_gen_exit_code GREATER 0)
   message( FATAL_ERROR "ZetaCli generation failed with exit code: ${ztcli_gen_exit_code}")
 endif()
-                      
+
 if(CONF_FILE)
   # CONF_FILE has either been specified on the cmake CLI or is already
   # in the CMakeCache.txt. This has precedence over the environment
