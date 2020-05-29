@@ -185,7 +185,7 @@ west build -t run
 	Expected results:
 #+begin_example
 -- west build: running target run
-[0/1] cd /home/rodrigopex/MEGA/Venus/Projects/zephyrproject/experimental_evaluation/sensors-over-internet-zeta/build ...drigopex/MEGA/Venus/Projects/zephyrproject/experimental_evaluation/sensors-over-internet-zeta/build/zephyr/zephyr.exe
+[0/1] cd /home/.../zephyrproject/experimental_evaluation/sensors-over-internet-zeta/build ...drigopex/MEGA/Venus/Projects/zephyrproject/experimental_evaluation/sensors-over-internet-zeta/build/zephyr/zephyr.exe
  Booting Zephyr OS build v2.3.0-rc1-229-g56b65e43de85  ***
 [00:00:00.000,000] <dbg> zeta.BOARD_task: BOARD Service has started...[OK]
 [00:00:00.000,000] <dbg> zeta.CORE_service_callback: Calling CORE Callback...
@@ -250,3 +250,5 @@ a2 8a 8c 01 00                                   |.....
 [00:00:15.050,000] <dbg> zeta.CORE_service_callback: Calling CORE Callback...
 [00:00:15.050,000] <dbg> zeta.CORE_service_callback: Calling CORE Callback...
 #+end_example
+
+You must type /Ctrl+c/ to stop execution.
