@@ -1,7 +1,7 @@
 # Experimental Evaluation
 This repository stores all the experiments code. For making the experiments accurate, we proposed a possible real system requirement list detailed as follows.
 
-## Hypothetical System
+## Hypothetical System - Sensor over the Internet
 This section lists the system's requirements used in *Section - Experimental Evaluation*. We provided an example of code that explores different aspects of embedded systems coding. Let us consider the systems has three sensors, network access, Flash access, and has to monitor and make some calculation with the value of the sensors. The following sections detail the features needed. 
 
 ### Requirement - R01
@@ -24,3 +24,15 @@ It must store, in Flash (non-volatile), the last sample of sensor A and the last
 
 ### Requirement - R05
 The system receives a random remote request every 30 seconds.
+
+## Implementations
+We implemented three variations of the same hypothetical system. The first tries to mimic the [Arduino](https://www.arduino.cc/) way to code (Single-threaded setup/loop); the second employs only RTOS features (Multi-threaded); the last one uses Zeta (Multi-threaded with Zeta).
+
+### Single-threaded implementation
+This one follows the Arduino implementation approach based on a single thread with all the responsibilities. It this case there is only two separations of code the Setup portions, which implements all the declaration and configuration of the module; and the Loop portion where the code executes.
+
+### Multi-threaded implementation
+On this implementation, we tried to use acceptable programming practices separating the system's functionality into four modules. The first one is the BOARD responsible for capturing the sensors' samples. The CORE is the central module capable of storing the volatile data, calculate the mean and for responding to remote requests. There is the STORAGE module aimed to store the non-volatile data and restore it when the system starts. The last one is NET able to receive requests and send responses to the remote peer. We tried to keep it simple and used only queues and semaphores.
+
+### Zeta implementation
+This one is similar to the Multi-threaded implementation in terms of module separation. However, all communication and storage functionality is Zeta responsibility. Consequently, there are only BOARD, CORE, and NET modules whenever the middleware assumes the STORAGE's role.
