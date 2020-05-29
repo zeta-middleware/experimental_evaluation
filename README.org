@@ -53,25 +53,83 @@ git clone <this repository url>
 source ${ZEPHYR_BASE}/zephyr-env.sh 
 	#+END_SRC
 
-	For calculating the memory footprint for this sample, we have to execute the following commands to build the project to the nrf52840dongle board. Note the /variation/ value can be: single-thread, multi-thread and zeta.
+	For calculating the memory footprint for this sample, we have to execute the following commands to build the project to the nrf52840dongle board. For illustration we are compiling the zeta variation.
    
 	#+BEGIN_SRC bash
-cd sensor-over-internet-<variation>
+cd sensor-over-internet-zeta
 CONF_FILE=prj_nrf52840dongle_nrf52840.conf; rm -rf build && west build -b nrf52840dongle_nrf52840
 	#+END_SRC
 
 #+begin_example
+-- west build: generating a build system
+[ZETA]: Running zeta.cmake
+[ZETA]: Current dir = /home/.../zephyrproject/experimental_evaluation/sensors-over-internet-zeta
+[ZETA]: ZETA_MODULE_DIR = /home/.../.local/lib/python3.6/site-packages/zeta
+[ZETA]: PROJECT_DIR = /home/.../zephyrproject/experimental_evaluation/sensors-over-internet-zeta/build
+[ZETA]: ZETA_DIR =  /home/.../zephyrproject/experimental_evaluation/sensors-over-internet-zeta/build/zeta
+[ZETA]: ZETA_SRC_DIR = /home/.../zephyrproject/experimental_evaluation/sensors-over-internet-zeta/build/zeta/src
+[ZETA]: ZETA_INCLUDE_DIR = /home/.../zephyrproject/experimental_evaluation/sensors-over-internet-zeta/build/zeta/include
+[ZETA]: ZETA_TEMPLATES_DIR = /home/.../.local/lib/python3.6/site-packages/zeta/templates
+[ZETA]: Creating Zeta project folder
+[ZETA]: Generating zeta.h...[OK]
+[ZETA]: Generating zeta.c...[OK]
+[ZETA]: Generating zeta.conf...[OK]
+Including boilerplate (Zephyr base): /home/.../zephyrproject/zephyr/cmake/app/boilerplate.cmake
+-- Application: /home/.../zephyrproject/experimental_evaluation/sensors-over-internet-zeta
+-- Zephyr version: 2.3.0-rc1 (/home/.../zephyrproject/zephyr)
+-- Found Python3: /usr/bin/python3.6 (found suitable exact version "3.6.9") found components:  Interpreter 
+-- Board: nrf52840dongle_nrf52840
+-- Found toolchain: zephyr (/home/.../zephyr-sdk-0.11.2)
+-- Found west: /home/.../.local/bin/west (found suitable version "0.7.2", minimum required is "0.7.1")
+-- Found dtc: /home/.../zephyr-sdk-0.11.2/sysroots/x86_64-pokysdk-linux/usr/bin/dtc (found suitable version "1.5.0", minimum required is "1.4.6")
+-- Found BOARD.dts: /home/.../zephyrproject/zephyr/boards/arm/nrf52840dongle_nrf52840/nrf52840dongle_nrf52840.dts
+-- Generated zephyr.dts: /home/.../zephyrproject/experimental_evaluation/sensors-over-internet-zeta/build/zephyr/zephyr.dts
+-- Generated devicetree_unfixed.h: /home/.../zephyrproject/experimental_evaluation/sensors-over-internet-zeta/build/zephyr/include/generated/devicetree_unfixed.h
+Parsing /home/.../zephyrproject/zephyr/Kconfig
+Loaded configuration '/home/.../zephyrproject/zephyr/boards/arm/nrf52840dongle_nrf52840/nrf52840dongle_nrf52840_defconfig'
+Merged configuration '/home/.../zephyrproject/experimental_evaluation/sensors-over-internet-zeta/prj_nrf52840dongle_nrf52840.conf'
+Merged configuration '/home/.../zephyrproject/experimental_evaluation/sensors-over-internet-zeta/build/zeta/zeta.conf'
+Configuration saved to '/home/.../zephyrproject/experimental_evaluation/sensors-over-internet-zeta/build/zephyr/.config'
+Kconfig header saved to '/home/.../zephyrproject/experimental_evaluation/sensors-over-internet-zeta/build/zephyr/include/generated/autoconf.h'
+-- The C compiler identification is GNU 9.2.0
+-- The CXX compiler identification is GNU 9.2.0
+-- The ASM compiler identification is GNU
+-- Found assembler: /home/...//zephyr-sdk-0.11.2/arm-zephyr-eabi/bin/arm-zephyr-eabi-gcc
+-- Cache files will be written to: /home/.../.cache/zephyr
+CMake Warning at /home/.../zephyrproject/zephyr/subsys/usb/CMakeLists.txt:28 (message):
+  CONFIG_USB_DEVICE_VID has default value 0x2FE3.
 
+  This value is only for testing and MUST be configured for USB products.
+
+
+CMake Warning at /home/.../zephyrproject/zephyr/subsys/usb/CMakeLists.txt:34 (message):
+  CONFIG_USB_DEVICE_PID has default value 0x100.
+
+  This value is only for testing and MUST be configured for USB products.
+
+
+[ZETA]: Set Zeta as a zephyr module
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/.../zephyrproject/experimental_evaluation/sensors-over-internet-zeta/build
+-- west build: building application
+[1/163] Preparing syscall dependency handling
+
+[158/163] Linking C executable zephyr/zephyr_prebuilt.elf
+Memory region         Used Size  Region Size  %age Used
+           FLASH:       49792 B      1020 KB      4.77%
+            SRAM:       25550 B       256 KB      9.75%
+        IDT_LIST:          88 B         2 KB      4.30%
+[163/163] Linking C executable zephyr/zephyr.elf
 #+end_example
  
-	For executing this sample, we have to execute this to the Native Posix board:
+	For building this sample, we have to execute this to the Native Posix board:
 
 	#+BEGIN_SRC bash
 rm -rf build && west build -b native_posix
 	#+END_SRC
 
 	Expected results:
-  
 	#+begin_example
 -- west build: generating a build system
 [ZETA]: Running zeta.cmake
@@ -119,7 +177,76 @@ Kconfig header saved to '/home/.../zephyrproject/experimental_evaluation/sensors
 [104/104] Linking C executable zephyr/zephyr.elf
 	#+end_example
 
+	For running it, you must to run the following command:
 	#+BEGIN_SRC bash
 west build -t run
 	#+END_SRC
 
+	Expected results:
+#+begin_example
+-- west build: running target run
+[0/1] cd /home/rodrigopex/MEGA/Venus/Projects/zephyrproject/experimental_evaluation/sensors-over-internet-zeta/build ...drigopex/MEGA/Venus/Projects/zephyrproject/experimental_evaluation/sensors-over-internet-zeta/build/zephyr/zephyr.exe
+ Booting Zephyr OS build v2.3.0-rc1-229-g56b65e43de85  ***
+[00:00:00.000,000] <dbg> zeta.BOARD_task: BOARD Service has started...[OK]
+[00:00:00.000,000] <dbg> zeta.CORE_service_callback: Calling CORE Callback...
+[00:00:00.000,000] <dbg> zeta.CORE_service_callback: Calling CORE Callback...
+[00:00:00.000,000] <dbg> zeta.CORE_service_callback: Calling CORE Callback...
+[00:00:00.000,000] <inf> fs_nvs: 4 Sectors of 4096 bytes
+[00:00:00.000,000] <inf> fs_nvs: alloc wra: 0, fe0
+[00:00:00.000,000] <inf> fs_nvs: data wra: 0, 6
+[00:00:00.000,000] <inf> zeta: NVS started...[OK]
+[00:00:00.000,000] <inf> zeta: [ ] Recovering data from flash
+[00:00:00.000,000] <inf> zeta: Id: 1
+[00:00:00.000,000] <inf> zeta: Value: 
+1e                                               |.                
+[00:00:00.000,000] <inf> zeta: Id: 5
+[00:00:00.000,000] <inf> zeta: Value: 
+a2 8a 8c 01 00                                   |.....            
+[00:00:00.000,000] <inf> zeta: [X] Recovering data from flash
+[00:00:00.000,000] <dbg> zeta.CORE_task: CORE Service has started...[OK]
+[00:00:00.000,000] <dbg> zeta.core_handle_channel_callback: Data received from sensor A: 30
+[00:00:00.000,000] <dbg> zeta.core_handle_channel_callback: Data received from sensor B: 89
+[00:00:00.000,000] <dbg> zeta.core_handle_channel_callback: Data received from sensor C: 101352
+[00:00:00.000,000] <dbg> zeta.NET_task: NET Service has started...[OK]
+[00:00:00.000,000] <dbg> zeta.handle_net_requests: Getting a virtual packet request from net with id: a0
+[00:00:00.000,000] <dbg> zeta.handle_net_requests: Sending a net packet request to NET_REQUEST channel...
+[00:00:00.000,000] <dbg> zeta.CORE_service_callback: Calling CORE Callback...
+[00:00:00.000,000] <dbg> zeta.core_handle_channel_callback: Net request received with ID: a0
+[00:00:00.000,000] <dbg> zeta.NET_service_callback: Calling NET Callback...
+[00:00:03.010,000] <dbg> zeta.CORE_service_callback: Calling CORE Callback...
+[00:00:03.010,000] <dbg> zeta.CORE_service_callback: Calling CORE Callback...
+[00:00:03.010,000] <dbg> zeta.CORE_service_callback: Calling CORE Callback...
+[00:00:03.010,000] <dbg> zeta.core_handle_channel_callback: Data received from sensor A: 22
+[00:00:03.010,000] <dbg> zeta.core_handle_channel_callback: Data received from sensor B: 88
+[00:00:03.010,000] <dbg> zeta.core_handle_channel_callback: Data received from sensor C: 101379
+[00:00:06.020,000] <dbg> zeta.CORE_service_callback: Calling CORE Callback...
+[00:00:06.020,000] <dbg> zeta.CORE_service_callback: Calling CORE Callback...
+[00:00:06.020,000] <dbg> zeta.CORE_service_callback: Calling CORE Callback...
+[00:00:06.020,000] <dbg> zeta.core_handle_channel_callback: Data received from sensor A: 23
+[00:00:06.020,000] <dbg> zeta.core_handle_channel_callback: Data received from sensor B: 87
+[00:00:06.020,000] <dbg> zeta.core_handle_channel_callback: Data received from sensor C: 101406
+[00:00:09.030,000] <dbg> zeta.CORE_service_callback: Calling CORE Callback...
+[00:00:09.030,000] <dbg> zeta.CORE_service_callback: Calling CORE Callback...
+[00:00:09.030,000] <dbg> zeta.CORE_service_callback: Calling CORE Callback...
+[00:00:09.030,000] <dbg> zeta.core_handle_channel_callback: Data received from sensor A: 24
+[00:00:09.030,000] <dbg> zeta.core_handle_channel_callback: Data received from sensor B: 86
+[00:00:09.030,000] <dbg> zeta.core_handle_channel_callback: Data received from sensor C: 101433
+[00:00:10.010,000] <wrn> zeta: CPU usage: 30%
+[00:00:10.010,000] <dbg> zeta.net_handle_channel_callback: Net response received: a0
+[00:00:10.010,000] <dbg> zeta.net_handle_channel_callback: Last sensor A data saved: 30
+[00:00:10.010,000] <dbg> zeta.handle_net_requests: Getting a virtual packet request from net with id: a4
+[00:00:10.010,000] <dbg> zeta.handle_net_requests: Sending a net packet request to NET_REQUEST channel...
+[00:00:10.010,000] <dbg> zeta.CORE_service_callback: Calling CORE Callback...
+[00:00:10.010,000] <dbg> zeta.sensor_b_mean: B Mean -> i: 4, sum: 350, mean: 87
+[00:00:10.010,000] <dbg> zeta.core_handle_channel_callback: Net request received with ID: a4
+[00:00:10.010,000] <dbg> zeta.NET_service_callback: Calling NET Callback...
+[00:00:12.040,000] <dbg> zeta.CORE_service_callback: Calling CORE Callback...
+[00:00:12.040,000] <dbg> zeta.CORE_service_callback: Calling CORE Callback...
+[00:00:12.040,000] <dbg> zeta.CORE_service_callback: Calling CORE Callback...
+[00:00:12.040,000] <dbg> zeta.core_handle_channel_callback: Data received from sensor A: 25
+[00:00:12.040,000] <dbg> zeta.core_handle_channel_callback: Data received from sensor B: 85
+[00:00:12.040,000] <dbg> zeta.core_handle_channel_callback: Data received from sensor C: 101460
+[00:00:15.050,000] <dbg> zeta.CORE_service_callback: Calling CORE Callback...
+[00:00:15.050,000] <dbg> zeta.CORE_service_callback: Calling CORE Callback...
+[00:00:15.050,000] <dbg> zeta.CORE_service_callback: Calling CORE Callback...
+#+end_example
