@@ -27,7 +27,7 @@ This repository stores all the experiments code. For making the experiments accu
   The system receives a random remote request every 30 seconds.
 
 ** Implementations
- We implemented three variations of the same hypothetical system. The first tries to mimic the [Arduino](https://www.arduino.cc/) way to code (Single-threaded setup/loop); the second employs only RTOS features (Multi-threaded); the last one uses Zeta (Multi-threaded with Zeta).
+ We implemented three variations of the same hypothetical system. The first tries to mimic the [[https://www.arduino.cc/][Arduino]] way to code (Single-threaded setup/loop); the second employs only RTOS features (Multi-threaded); the last one uses Zeta (Multi-threaded with Zeta).
 
 *** Single-threaded implementation
   This one follows the Arduino implementation approach based on a single thread with all the responsibilities. It this case there is only two separations of code the Setup portions, which implements all the declaration and configuration of the module; and the Loop portion where the code executes.
