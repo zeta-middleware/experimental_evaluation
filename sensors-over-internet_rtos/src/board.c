@@ -84,8 +84,8 @@ void BOARD_task()
         k_msgq_put(&sensor_b_data_stream, &sensor_b_data, K_MSEC(500));
         sensor_c_data = get_sensor_c();
         k_msgq_put(&sensor_c_data_stream, &sensor_c_data, K_MSEC(500));
-        k_sleep(K_SECONDS(2));
+        k_sleep(K_SECONDS(3));
     }
 }
 
-K_THREAD_DEFINE(BOARD, 512, BOARD_task, NULL, NULL, NULL, 3, 0, K_NO_WAIT);
+K_THREAD_DEFINE(BOARD, 512, BOARD_task, NULL, NULL, NULL, 3, 0, 0);

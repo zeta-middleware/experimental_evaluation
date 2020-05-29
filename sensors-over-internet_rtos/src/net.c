@@ -11,7 +11,7 @@ K_MSGQ_DEFINE(net_request_msgq, 1, 10, 1);
 
 u8_t generate_random_number(u8_t lower, u8_t upper)
 {
-    return (rand() % (upper - lower + 1)) + lower;
+    return (sys_rand32_get() % (upper - lower + 1)) + lower;
 }
 
 static void handle_net_requests(void)
@@ -75,7 +75,10 @@ void NET_task()
         if (!k_msgq_get(&net_uplink_msgq, net_packet, K_NO_WAIT)) {
             net_handle_channel_callback(net_packet);
         }
+        u32_t per = cpu_stats_non_idle_and_sched_get_percent();
+        LOG_WRN("CPU usage: %u%%\n", per);
+        cpu_stats_reset_counters();
     }
 }
 
-K_THREAD_DEFINE(NET, 512, NET_task, NULL, NULL, NULL, 2, 0, K_NO_WAIT);
+K_THREAD_DEFINE(NET, 512, NET_task, NULL, NULL, NULL, 2, 0, 0);

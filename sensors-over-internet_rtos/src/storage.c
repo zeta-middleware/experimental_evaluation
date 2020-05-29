@@ -1,23 +1,19 @@
+#include <drivers/flash.h>
 #include <fs/nvs.h>
 #include <kernel.h>
 #include <logging/log.h>
-#include <stdlib.h>
+#include <storage/flash_map.h>
 #include <zephyr.h>
-
 #include "board.h"
 #include "core.h"
 
 LOG_MODULE_REGISTER(storage, 4);
 
-#define NVS_SECTOR_SIZE DT_FLASH_ERASE_BLOCK_SIZE
-#define NVS_SECTOR_COUNT 4
-#define NVS_STORAGE_OFFSET DT_FLASH_AREA_STORAGE_OFFSET
+/* #define NVS_SECTOR_SIZE DT_FLASH_ERASE_BLOCK_SIZE */
+/* #define NVS_SECTOR_COUNT 4 */
+/* #define NVS_STORAGE_OFFSET DT_FLASH_AREA_STORAGE_OFFSET */
 
-static struct nvs_fs zt_fs = {
-    .sector_size  = NVS_SECTOR_SIZE,
-    .sector_count = NVS_SECTOR_COUNT,
-    .offset       = NVS_STORAGE_OFFSET,
-};
+static struct nvs_fs zt_fs;
 
 void store()
 {
@@ -68,8 +64,17 @@ void restore()
 }
 void STORAGE_task(void)
 {
-    int error = nvs_init(&zt_fs, DT_FLASH_DEV_NAME);
-    if (error) {
+    struct flash_pages_info info;
+    zt_fs.offset = FLASH_AREA_OFFSET(storage);
+    int rc       = flash_get_page_info_by_offs(
+        device_get_binding(DT_CHOSEN_ZEPHYR_FLASH_CONTROLLER_LABEL), zt_fs.offset, &info);
+    if (rc) {
+        printk("Unable to get page info");
+    }
+    zt_fs.sector_size  = info.size;
+    zt_fs.sector_count = 3U;
+    rc                 = nvs_init(&zt_fs, DT_CHOSEN_ZEPHYR_FLASH_CONTROLLER_LABEL);
+    if (rc) {
         LOG_INF("Flash Init failed");
     } else {
         LOG_INF("NVS started...[OK]");
@@ -81,4 +86,4 @@ void STORAGE_task(void)
     }
 }
 
-K_THREAD_DEFINE(STORAGE, 512, STORAGE_task, NULL, NULL, NULL, 5, 0, K_NO_WAIT);
+K_THREAD_DEFINE(STORAGE, 512, STORAGE_task, NULL, NULL, NULL, 5, 0, 0);
