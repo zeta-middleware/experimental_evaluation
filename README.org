@@ -43,26 +43,31 @@ This repository stores all the experiments code. For making the experiments accu
 	Clone this repository to the zephyrproject folder. 
 
 	#+BEGIN_SRC bash
-	  cd /home/.../zephyrproject
-      git clone <this repository url> 
+cd /home/.../zephyrproject
+git clone <this repository url> 
 	#+END_SRC
+
 	Before compiling the samples you have to make sure the env for Zephyr is ok. Execute the following command:
 
 	#+BEGIN_SRC bash
-	  source ${ZEPHYR_BASE}/zephyr-env.sh 
+source ${ZEPHYR_BASE}/zephyr-env.sh 
 	#+END_SRC
 
-	For calculating the memory footprint for this sample, we have to execute this to the nrf52840dongle board:
+	For calculating the memory footprint for this sample, we have to execute the following commands to build the project to the nrf52840dongle board. Note the /variation/ value can be: single-thread, multi-thread and zeta.
    
 	#+BEGIN_SRC bash
-	  cd sensor-over-internet-<variation>
-	  CONF_FILE=prj_nrf52840dongle_nrf52840.conf; rm -rf build && west build -b nrf52840dongle_nrf52840
+cd sensor-over-internet-<variation>
+CONF_FILE=prj_nrf52840dongle_nrf52840.conf; rm -rf build && west build -b nrf52840dongle_nrf52840
 	#+END_SRC
+
+#+begin_example
+
+#+end_example
  
 	For executing this sample, we have to execute this to the Native Posix board:
 
 	#+BEGIN_SRC bash
-	  rm -rf build && west build -b native_posix
+rm -rf build && west build -b native_posix
 	#+END_SRC
 
 	Expected results:
@@ -115,5 +120,6 @@ Kconfig header saved to '/home/.../zephyrproject/experimental_evaluation/sensors
 	#+end_example
 
 	#+BEGIN_SRC bash
-	  west build -t run
+west build -t run
 	#+END_SRC
+
