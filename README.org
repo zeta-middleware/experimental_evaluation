@@ -37,3 +37,83 @@ This repository stores all the experiments code. For making the experiments accu
 
 *** Zeta implementation
   This one is similar to the Multi-threaded implementation in terms of module separation. However, all communication and storage functionality is Zeta responsibility. Consequently, there are only BOARD, CORE, and NET modules whenever the middleware assumes the STORAGE's role.
+
+*** Execution
+
+	Clone this repository to the zephyrproject folder. 
+
+	#+BEGIN_SRC bash
+	  cd /home/.../zephyrproject
+      git clone <this repository url> 
+	#+END_SRC
+	Before compiling the samples you have to make sure the env for Zephyr is ok. Execute the following command:
+
+	#+BEGIN_SRC bash
+	  source ${ZEPHYR_BASE}/zephyr-env.sh 
+	#+END_SRC
+
+	For calculating the memory footprint for this sample, we have to execute this to the nrf52840dongle board:
+   
+	#+BEGIN_SRC bash
+	  cd sensor-over-internet-<variation>
+	  CONF_FILE=prj_nrf52840dongle_nrf52840.conf; rm -rf build && west build -b nrf52840dongle_nrf52840
+	#+END_SRC
+ 
+	For executing this sample, we have to execute this to the Native Posix board:
+
+	#+BEGIN_SRC bash
+	  rm -rf build && west build -b native_posix
+	#+END_SRC
+
+	Expected results:
+  
+	#+begin_example
+-- west build: generating a build system
+[ZETA]: Running zeta.cmake
+[ZETA]: Current dir = /home/.../zephyrproject/experimental_evaluation/sensors-over-internet-<variation>
+[ZETA]: ZETA_MODULE_DIR = /home/.../.local/lib/python3.6/site-packages/zeta
+[ZETA]: PROJECT_DIR = /home/.../zephyrproject/experimental_evaluation/sensors-over-internet-<variation>/build
+[ZETA]: ZETA_DIR =  /home/.../zephyrproject/experimental_evaluation/sensors-over-internet-<variation>/build/zeta
+[ZETA]: ZETA_SRC_DIR = /home/.../zephyrproject/experimental_evaluation/sensors-over-internet-<variation>/build/zeta/src
+[ZETA]: ZETA_INCLUDE_DIR = /home/.../zephyrproject/experimental_evaluation/sensors-over-internet-<variation>/build/zeta/include
+[ZETA]: ZETA_TEMPLATES_DIR = /home/.../.local/lib/python3.6/site-packages/zeta/templates
+[ZETA]: Creating Zeta project folder
+[ZETA]: Generating zeta.h...[OK]
+[ZETA]: Generating zeta.c...[OK]
+[ZETA]: Generating zeta.conf...[OK]
+Including boilerplate (Zephyr base): /home/.../zephyrproject/zephyr/cmake/app/boilerplate.cmake
+-- Application: /home/.../zephyrproject/experimental_evaluation/sensors-over-internet-<variation>
+-- Zephyr version: 2.3.0-rc1 (/home/.../zephyrproject/zephyr)
+-- Found Python3: /usr/bin/python3.6 (found suitable exact version "3.6.9") found components:  Interpreter 
+-- Board: native_posix
+-- Found toolchain: zephyr (/home/...//zephyr-sdk-0.11.2)
+-- Found west: /home/.../.local/bin/west (found suitable version "0.7.2", minimum required is "0.7.1")
+-- Found dtc: /home/.../zephyr-sdk-0.11.2/sysroots/x86_64-pokysdk-linux/usr/bin/dtc (found suitable version "1.5.0", minimum required is "1.4.6")
+-- Found toolchain: host (gcc/ld)
+-- Found BOARD.dts: /home/.../zephyrproject/zephyr/boards/posix/native_posix/native_posix.dts
+-- Generated zephyr.dts: /home/.../zephyrproject/experimental_evaluation/sensors-over-internet-<variation>/build/zephyr/zephyr.dts
+-- Generated devicetree_unfixed.h: /home/.../zephyrproject/experimental_evaluation/sensors-over-internet-<variation>/build/zephyr/include/generated/devicetree_unfixed.h
+Parsing /home/.../zephyrproject/zephyr/Kconfig
+Loaded configuration '/home/.../zephyrproject/zephyr/boards/posix/native_posix/native_posix_defconfig'
+Merged configuration '/home/.../zephyrproject/experimental_evaluation/sensors-over-internet-<variation>/prj.conf'
+Merged configuration '/home/.../zephyrproject/experimental_evaluation/sensors-over-internet-<variation>/build/zeta/zeta.conf'
+Configuration saved to '/home/.../zephyrproject/experimental_evaluation/sensors-over-internet-<variation>/build/zephyr/.config'
+Kconfig header saved to '/home/.../zephyrproject/experimental_evaluation/sensors-over-internet-<variation>/build/zephyr/include/generated/autoconf.h'
+-- The C compiler identification is GNU 7.5.0
+-- The CXX compiler identification is GNU 7.5.0
+-- The ASM compiler identification is GNU
+-- Found assembler: /usr/bin/gcc
+-- Cache files will be written to: /home/.../.cache/zephyr
+[ZETA]: Set Zeta as a zephyr module
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/.../zephyrproject/experimental_evaluation/sensors-over-internet-<variation>/build
+-- west build: building application
+[1/104] Preparing syscall dependency handling
+
+[104/104] Linking C executable zephyr/zephyr.elf
+	#+end_example
+
+	#+BEGIN_SRC bash
+	  west build -t run
+	#+END_SRC
