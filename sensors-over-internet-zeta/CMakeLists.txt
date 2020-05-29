@@ -6,7 +6,5 @@ project(project_name)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-message(" >>> CONF_FILE LIST$ -> ${CONF_FILE}")
-
 include_directories(${HEADERS})
 target_sources(app PRIVATE ${SOURCES})
