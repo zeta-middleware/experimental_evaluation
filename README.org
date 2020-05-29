@@ -13,12 +13,12 @@ This repository stores all the experiments code. For making the experiments accu
 
 *** Requirement  - R03
 	It can receive remote requests of six different types:
-	 1. **0xa0** - It requests Sensor A data;
-	 2. **0xa1** - It requests Sensor B data;
-	 3. **0xa2** - It requests Sensor C data;
-	 4. **0xa3** - It requests last ten samples Sensor A data mean;
-	 5. **0xa4** - It requests last ten samples Sensor B data mean;
-	 6. **0xa5** - It requests last ten samples Sensor C data mean;
+	 1. *0xa0* - It requests Sensor A data;
+	 2. *0xa1* - It requests Sensor B data;
+	 3. *0xa2* - It requests Sensor C data;
+	 4. *0xa3* - It requests last ten samples Sensor A data mean;
+	 5. *0xa4* - It requests last ten samples Sensor B data mean;
+	 6. *0xa5* - It requests last ten samples Sensor C data mean;
 
 *** Requirement - R04
   It must store, in Flash (non-volatile), the last sample of sensor A and the last remote response data every 30 seconds. When the system starts, it must recover the flash data;
